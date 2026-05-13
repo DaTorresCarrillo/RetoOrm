@@ -228,7 +228,8 @@ lsof -ti:5000 | xargs kill -9
 
 ## 👤 Autores
 
-Sistema desarrollado como parte del reto de programación para gestión de bibliotecas.
+Diego Alejandro Torres Carrillo
+Jonhy Sebastian Bejarano Gonzales
 
 ## 📄 Licencia
 
