@@ -37,13 +37,19 @@
                 <td>{{ prestamo.fecha_prestamo.strftime('%d/%m/%Y') if prestamo.fecha_prestamo else '-' }}</td>
                 <td>{{ prestamo.fecha_devolucion.strftime('%d/%m/%Y') if prestamo.fecha_devolucion else '-' }}</td>
                 <td>
-                    {% set dias_restantes = (prestamo.fecha_devolucion - now().date()).days %}
-                    {% if dias_restantes < 0 %}
-                        <span class="badge bg-danger">{{ dias_restantes * -1 }} días vencido</span>
-                    {% elif dias_restantes == 0 %}
-                        <span class="badge bg-warning">Vence hoy</span>
+                    {% if prestamo.fecha_devolucion %}
+                        {% if prestamo.vencido %}
+                            <span class="badge bg-danger">Vencido</span>
+                        {% else %}
+                            {% set dias_restantes = (prestamo.fecha_devolucion - prestamo.fecha_prestamo).days %}
+                            {% if dias_restantes <= 7 %}
+                                <span class="badge bg-warning">{{ dias_restantes }} días</span>
+                            {% else %}
+                                <span class="badge bg-success">{{ dias_restantes }} días</span>
+                            {% endif %}
+                        {% endif %}
                     {% else %}
-                        <span class="badge bg-success">{{ dias_restantes }} días</span>
+                        <span class="badge bg-secondary">Sin fecha</span>
                     {% endif %}
                 </td>
                 <td>

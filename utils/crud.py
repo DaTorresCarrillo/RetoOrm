@@ -123,6 +123,7 @@ def devolver_libro(db: Session, prestamo_id: int) -> Optional[Prestamo]:
     prestamo = db.query(Prestamo).filter(Prestamo.id == prestamo_id).first()
     if prestamo and not prestamo.devuelto:
         prestamo.fecha_entrega = date.today()
+        prestamo.devuelto = True
         db.commit()
         db.refresh(prestamo)
     return prestamo
@@ -180,3 +181,22 @@ def usuarios_con_prestamos_vencidos(db: Session) -> List[Dict[str, Any]]:
         }
         for prestamo in prestamos_vencidos
     ]
+
+# Funciones para obtener estadísticas generales
+def obtener_estadisticas_generales(db: Session) -> Dict[str, int]:
+    """Obtiene estadísticas generales del sistema"""
+    total_autores = db.query(Autor).count()
+    total_libros = db.query(Libro).count()
+    total_usuarios = db.query(Usuario).count()
+    total_prestamos = db.query(Prestamo).count()
+    
+    return {
+        'total_autores': total_autores,
+        'total_libros': total_libros,
+        'total_usuarios': total_usuarios,
+        'total_prestamos': total_prestamos
+    }
+
+def obtener_prestamos_activos_count(db: Session) -> int:
+    """Obtiene el número de préstamos activos"""
+    return db.query(Prestamo).filter(Prestamo.fecha_entrega.is_(None)).count()

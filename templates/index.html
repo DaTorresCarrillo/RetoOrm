@@ -56,4 +56,56 @@
         </div>
     </div>
 </div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h4><i class="fas fa-chart-bar"></i> Reportes y Estadísticas</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-trophy fa-2x text-primary mb-2"></i>
+                                <h6 class="card-title">Autor con Más Libros</h6>
+                                <p class="card-text">Encuentra el autor más prolífico de la biblioteca</p>
+                                <a href="{{ url_for('prestamos.reportes') }}" class="btn btn-sm btn-outline-primary">Ver Reporte</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                                <h6 class="card-title">Préstamos Vencidos</h6>
+                                <p class="card-text">Controla devoluciones pendientes fuera de plazo</p>
+                                <a href="{{ url_for('prestamos.prestamos_vencidos') }}" class="btn btn-sm btn-outline-warning">Ver Vencidos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-2x text-success mb-2"></i>
+                                <h6 class="card-title">Préstamos Activos</h6>
+                                <p class="card-text">Revisa todos los préstamos actualmente vigentes</p>
+                                <a href="{{ url_for('prestamos.prestamos_activos') }}" class="btn btn-sm btn-outline-success">Ver Activos</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-12 text-center">
+                        <a href="{{ url_for('prestamos.reportes') }}" class="btn btn-lg btn-dark">
+                            <i class="fas fa-chart-line"></i> Ver Todos los Reportes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

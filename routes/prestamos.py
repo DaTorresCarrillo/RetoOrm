@@ -6,7 +6,8 @@ from models import Prestamo, Libro, Usuario
 from utils.crud import (
     crear_prestamo, obtener_prestamo, obtener_prestamos, 
     devolver_libro, eliminar_prestamo, buscar_libros_prestados_actualmente,
-    usuarios_con_prestamos_vencidos, autor_con_mas_libros
+    usuarios_con_prestamos_vencidos, autor_con_mas_libros,
+    obtener_estadisticas_generales, obtener_prestamos_activos_count
 )
 
 prestamos_bp = Blueprint('prestamos', __name__, url_prefix='/prestamos')
@@ -93,9 +94,13 @@ def reportes():
     try:
         autor_mas_libros = autor_con_mas_libros(db)
         vencidos = usuarios_con_prestamos_vencidos(db)
+        estadisticas = obtener_estadisticas_generales(db)
+        prestamos_activos = obtener_prestamos_activos_count(db)
         
         return render_template('prestamos/reportes.html', 
                              autor_mas_libros=autor_mas_libros, 
-                             vencidos=vencidos)
+                             vencidos=vencidos,
+                             estadisticas=estadisticas,
+                             prestamos_activos=prestamos_activos)
     finally:
         db.close()
