@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar Libros - Sistema de Biblioteca{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Buscar Libros</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>Criterios de Búsqueda</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="tipo_busqueda" class="form-label">Tipo de Búsqueda</label>
+                                <select class="form-control" id="tipo_busqueda" name="tipo_busqueda" required>
+                                    <option value="">Selecciona...</option>
+                                    <option value="titulo" {% if tipo_busqueda == 'titulo' %}selected{% endif %}>Título</option>
+                                    <option value="autor" {% if tipo_busqueda == 'autor' %}selected{% endif %}>Autor</option>
+                                    <option value="genero" {% if tipo_busqueda == 'genero' %}selected{% endif %}>Género</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="termino" class="form-label">Término de Búsqueda</label>
+                                <input type="text" class="form-control" id="termino" name="termino" 
+                                       value="{{ termino or '' }}" placeholder="Ingresa el término a buscar">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('libros.lista_libros') }}" class="btn btn-secondary w-100">
+            <i class="fas fa-arrow-left"></i> Volver a Lista
+        </a>
+    </div>
+</div>
+
+{% if libros is not none %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>
+                    Resultados de búsqueda
+                    {% if termino %}
+                    para "{{ termino }}" en {{ tipo_busqueda }}
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if libros %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Autor</th>
+                                <th>Género</th>
+                                <th>Año</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for libro in libros %}
+                            <tr>
+                                <td>{{ libro.id }}</td>
+                                <td>{{ libro.titulo }}</td>
+                                <td>{{ libro.autor.nombre if libro.autor else '-' }}</td>
+                                <td>{{ libro.genero or '-' }}</td>
+                                <td>{{ libro.año_publicacion or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i> Se encontraron {{ libros|length }} resultados.
+                </div>
+                {% else %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> No se encontraron resultados para la búsqueda.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Préstamos Vencidos - Sistema de Biblioteca{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Préstamos Vencidos</h2>
+    <a href="{{ url_for('prestamos.lista_prestamos') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver a Todos
+    </a>
+</div>
+
+{% if vencidos %}
+<div class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle"></i> Hay {{ vencidos|length }} préstamos vencidos.
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Usuario</th>
+                <th>Libro</th>
+                <th>Fecha Devolución</th>
+                <th>Días Vencido</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in vencidos %}
+            <tr>
+                <td>{{ item.usuario_nombre }}</td>
+                <td>{{ item.libro_titulo }}</td>
+                <td>{{ item.fecha_devolucion }}</td>
+                <td>
+                    <span class="badge bg-danger">{{ item.dias_vencido }} días</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-warning" onclick="alert('Función de notificación no implementada')">
+                        <i class="fas fa-bell"></i> Notificar
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-success">
+    <i class="fas fa-check-circle"></i> No hay préstamos vencidos actualmente.
+</div>
+{% endif %}
+{% endblock %}

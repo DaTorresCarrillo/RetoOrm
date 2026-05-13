@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Préstamos Activos - Sistema de Biblioteca{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Préstamos Activos</h2>
+    <a href="{{ url_for('prestamos.lista_prestamos') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver a Todos
+    </a>
+</div>
+
+{% if prestamos %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> Hay {{ prestamos|length }} préstamos actualmente activos.
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Libro</th>
+                <th>Usuario</th>
+                <th>Fecha Préstamo</th>
+                <th>Fecha Devolución</th>
+                <th>Días Restantes</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos %}
+            <tr>
+                <td>{{ prestamo.id }}</td>
+                <td>{{ prestamo.libro.titulo if prestamo.libro else '-' }}</td>
+                <td>{{ prestamo.usuario.nombre if prestamo.usuario else '-' }}</td>
+                <td>{{ prestamo.fecha_prestamo.strftime('%d/%m/%Y') if prestamo.fecha_prestamo else '-' }}</td>
+                <td>{{ prestamo.fecha_devolucion.strftime('%d/%m/%Y') if prestamo.fecha_devolucion else '-' }}</td>
+                <td>
+                    {% set dias_restantes = (prestamo.fecha_devolucion - now().date()).days %}
+                    {% if dias_restantes < 0 %}
+                        <span class="badge bg-danger">{{ dias_restantes * -1 }} días vencido</span>
+                    {% elif dias_restantes == 0 %}
+                        <span class="badge bg-warning">Vence hoy</span>
+                    {% else %}
+                        <span class="badge bg-success">{{ dias_restantes }} días</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('prestamos.devolver_libro_route', id=prestamo.id) }}" 
+                          style="display: inline;" onsubmit="return confirm('¿Confirmar devolución del libro?')">
+                        <button type="submit" class="btn btn-sm btn-success">
+                            <i class="fas fa-check"></i> Devolver
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-success">
+    <i class="fas fa-check-circle"></i> No hay préstamos activos actualmente.
+</div>
+{% endif %}
+{% endblock %}
